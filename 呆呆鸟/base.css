@@ -1,0 +1,339 @@
+/* base.css (修改后) */
+
+/* ============================================================
+   【0. 全局盒模型设置 - 这是新加的】
+   ============================================================ */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* 关键：隐藏水平滚动条，防止出现左侧白边 */
+    
+    /* 顺便在这里设置一些优秀的基础样式 */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   【1. 字体引入】
+   ============================================================ */
+@font-face {
+    font-family: 'InsFont';
+    src: url('https://raw.githubusercontent.com/1687216166Pat/wohuipinhao/main/AaPoSuiDeNiWoHuiPinHao-2.ttf') format('truetype');
+    font-display: swap;
+}
+
+/* ============================================================
+   【2. 变量定义 (主题系统)】
+   ============================================================ */
+:root { 
+    /* 尺寸与安全区 */
+    --ios-radius: 24px; 
+    --app-radius: 16px; 
+    --safe-top: max(env(safe-area-inset-top), 44px); 
+    --safe-bottom: max(env(safe-area-inset-bottom), 20px); 
+
+    /* === 浅色模式变量 (默认) === */
+    --ios-blue: #007AFF; 
+    --ios-green: #34C759; 
+    
+    --bg-body: #f2f2f7;          /* App 背景灰 */
+    --bg-card: #ffffff;          /* 卡片/列表背景白 */
+    --bg-header: rgba(255,255,255,0.85); /* 顶部栏半透明 */
+    --bg-input: #e3e3e8;         /* 输入框背景 */
+    
+    /* 组件背景：浅色模式下稍微白一点，增加可见度 */
+    --bg-widget: rgba(255, 255, 255, 0.25); 
+    --bg-dock: rgba(255,255,255,0.35);  /* Dock栏背景 */
+    
+    --text-primary: #000000;     /* 主文字 */
+    --text-secondary: #8e8e93;   /* 次要文字 */
+    --separator: #c6c6c8;        /* 分割线 */
+    
+    --wallpaper-dim: 0;          /* 壁纸遮罩透明度 */
+    --icon-brightness: 1;        /* 图标亮度 (1=原色) */
+    
+    --msg-me-bg: #1a1a1a;        --msg-me-text: #fff;
+    --msg-friend-bg: #fff;
+}
+
+/* === 🌑 深色模式 (Dark Mode) === */
+/* 当 body 标签上有 dark-mode 类时，下面的变量会覆盖上面的 */
+body.dark-mode {
+    /* 1. 背景色：按你的要求，使用高级深灰，不傻黑 */
+    --bg-body: #121212;          /* 主背景 */
+    --bg-card: #1C1C1E;          /* 卡片背景 (比背景稍亮，体现层级) */
+    --bg-header: rgba(28,28,30,0.85); /* 顶部栏深色半透明 */
+    --bg-input: #2C2C2E;         /* 输入框深灰 */
+    
+    /* 2. 组件背景：深色模式下，小组件要是深色的半透明 */
+    --bg-widget: rgba(40, 40, 40, 0.6); 
+    --bg-dock: rgba(40, 40, 40, 0.5);   /* Dock栏深色背景 */
+
+    /* 3. 文字色：按你的要求，柔和灰白 */
+    --text-primary: #E0E0E0;     /* 不刺眼的白 */
+    --text-secondary: #A0A0A0;   /* 次要文字 */
+    
+    /* 4. 分隔线：按你的要求，深灰色 */
+    --separator: #2A2A2A;        
+    
+    /* 5. 额外细节 */
+    --wallpaper-dim: 0.4;        /* 让壁纸变暗一点，护眼 */
+    --icon-brightness: 0.9;      /* 图标稍微压暗一点点 */
+    
+    /* 聊天气泡适配 */
+    --msg-me-bg: #0A84FF;        /* 自己发的消息变成蓝色 */
+    --msg-me-text: #fff;
+    --msg-friend-bg: #2C2C2E;    /* 对方发的消息变成深灰 */
+}
+
+body.dark-mode {
+    /* 1. 背景色：不再是死黑，而是高级灰黑 */
+    --bg-body: #121212;
+    --bg-card: #1C1C1E; /* 卡片稍微亮一点，体现层次感 */
+    --bg-input: #2C2C2E;
+    
+    /* 2. 文字色：不再是刺眼的纯白，而是柔和的灰白 */
+    --text-primary: #E0E0E0;
+    --text-secondary: #A0A0A0;
+    
+    /* 3. 分隔线：深灰色，隐约可见 */
+    --border-color: #2A2A2A;
+    
+    /* 其他变量保持不变 */
+    --ios-blue: #0A84FF;
+    --ios-green: #30D158;
+    --ios-red: #FF453A;
+    --mask-bg: rgba(0,0,0,0.6);
+}
+
+/* ============================================================
+   【修复：打勾按钮错位 & 时间选择器样式】
+   ============================================================ */
+/* 修复打勾圆圈内部对齐问题 */
+.radio-circle {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--text-secondary);
+    display: flex;            /* 关键：弹性布局 */
+    align-items: center;      /* 关键：垂直居中 */
+    justify-content: center;  /* 关键：水平居中 */
+    color: transparent;       /* 默认不显示勾 */
+    font-size: 14px;
+}
+
+/* 选中状态 */
+.list-row.active .radio-circle,
+.mode-option.active .radio-circle {
+    border-color: var(--ios-blue);
+    background: transparent;
+    color: var(--ios-blue);   /* 选中后显示蓝色的勾 */
+}
+
+/* 选中后显示勾勾符号 */
+.list-row.active .radio-circle::after,
+.mode-option.active .radio-circle::after {
+    content: '✔';
+    font-weight: bold;
+}
+
+/* 新增：时间选择器样式（让它看起来像普通文字，但能点） */
+.time-picker-input {
+    background: transparent;
+    border: none;
+    color: var(--ios-blue);
+    font-size: 17px;
+    font-family: inherit;
+    text-align: right;
+    outline: none;
+    cursor: pointer;
+}
+/* 去掉时间选择器的小钟表图标（为了美观） */
+.time-picker-input::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+
+/* ============================================================
+   【修复：打勾按钮错位 & 时间选择器样式】
+   ============================================================ */
+/* 修复打勾圆圈内部对齐问题 */
+.radio-circle {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--text-secondary);
+    display: flex;            /* 关键：弹性布局 */
+    align-items: center;      /* 关键：垂直居中 */
+    justify-content: center;  /* 关键：水平居中 */
+    color: transparent;       /* 默认不显示勾 */
+    font-size: 14px;
+}
+
+/* 选中状态 */
+.list-row.active .radio-circle,
+.mode-option.active .radio-circle {
+    border-color: var(--ios-blue);
+    background: transparent;
+    color: var(--ios-blue);   /* 选中后显示蓝色的勾 */
+}
+
+/* 选中后显示勾勾符号 */
+.list-row.active .radio-circle::after,
+.mode-option.active .radio-circle::after {
+    content: '✔';
+    font-weight: bold;
+}
+
+/* 新增：时间选择器样式（让它看起来像普通文字，但能点） */
+.time-picker-input {
+    background: transparent;
+    border: none;
+    color: var(--ios-blue);
+    font-size: 17px;
+    font-family: inherit;
+    text-align: right;
+    outline: none;
+    cursor: pointer;
+}
+/* 去掉时间选择器的小钟表图标（为了美观） */
+.time-picker-input::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+
+/* ============================================================
+   【修复：打勾按钮错位 & 时间选择器样式】
+   ============================================================ */
+/* 修复打勾圆圈内部对齐问题 */
+.radio-circle {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--text-secondary);
+    display: flex;            /* 关键：弹性布局 */
+    align-items: center;      /* 关键：垂直居中 */
+    justify-content: center;  /* 关键：水平居中 */
+    color: transparent;       /* 默认不显示勾 */
+    font-size: 14px;
+}
+
+/* 选中状态 */
+.list-row.active .radio-circle,
+.mode-option.active .radio-circle {
+    border-color: var(--ios-blue);
+    background: transparent;
+    color: var(--ios-blue);   /* 选中后显示蓝色的勾 */
+}
+
+/* 选中后显示勾勾符号 */
+.list-row.active .radio-circle::after,
+.mode-option.active .radio-circle::after {
+    content: '✔';
+    font-weight: bold;
+}
+
+/* 新增：时间选择器样式（让它看起来像普通文字，但能点） */
+.time-picker-input {
+    background: transparent;
+    border: none;
+    color: var(--ios-blue);
+    font-size: 17px;
+    font-family: inherit;
+    text-align: right;
+    outline: none;
+    cursor: pointer;
+}
+/* 去掉时间选择器的小钟表图标（为了美观） */
+.time-picker-input::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+
+/* ============================================================
+   【3. 重置与基础样式】
+   ============================================================ */
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+    font-family: 'InsFont', -apple-system, sans-serif; 
+    user-select: none; 
+    -webkit-tap-highlight-color: transparent; 
+}
+
+body { 
+    background-color: #000; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    height: 100vh; 
+    width: 100vw; 
+    overflow: hidden; 
+}
+
+/* ============================================================
+   【4. 核心布局】
+   ============================================================ */
+/* ============================================================
+   【最终版】 .iphone-screen 样式
+   ============================================================ */
+
+/* 这是基础样式，在所有屏幕尺寸下都生效 */
+.iphone-screen {
+    /* --- 核心布局和尺寸 --- */
+    position: relative;
+    width: 100%;
+    height: 100%; /* 或者 100vh */
+    margin: 0 auto; /* 在大屏幕上让模拟器水平居中 */
+    display: flex;
+    flex-direction: column;
+    
+    /* --- 溢出控制 (在所有情况下都必须生效！) --- */
+    overflow: hidden; 
+
+    /* --- 背景和外观 --- */
+    background: url('https://raw.githubusercontent.com/1687216166Pat/photo/main/IMG_3572.jpeg') center/cover no-repeat;
+    color: var(--text-primary);
+    
+    /* --- 动画效果 --- */
+    transition: all 0.3s ease; /* transition: all 会让尺寸变化也产生动画，效果更平滑 */
+}
+
+/* 壁纸压暗遮罩 (保持不变，很完美) */
+.iphone-screen::after {
+    content: ''; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    background: black; 
+    opacity: var(--wallpaper-dim); 
+    pointer-events: none;
+    transition: opacity 0.5s ease; 
+    z-index: -1; /* ✅ 优化：建议设为-1，确保它在所有内容之后 */
+}
+
+/* ============================================================
+   【最终版】 桌面端模拟器样式
+   ============================================================ */
+
+/* 这段样式只在屏幕宽度大于等于 500px 时生效 (比如电脑) */
+@media (min-width: 500px) { 
+    .iphone-screen { 
+        /* --- 覆盖尺寸，变成固定大小的模拟器 --- */
+        width: 375px; 
+        height: 812px; 
+        
+        /* --- 添加模拟器外观 --- */
+        border-radius: 45px; 
+        box-shadow: 0 0 0 12px #222, 0 20px 50px rgba(0,0,0,0.4); /* 添加了更逼真的阴影 */
+    } 
+}
