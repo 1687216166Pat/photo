@@ -330,3 +330,146 @@ function setScheduleType(type) {
         picker.style.display = 'none';
     }
 }
+/**
+ * ============================================================
+ * 主屏幕模式切换逻辑 (双模方案)
+ * ============================================================
+ */
+
+// 1. 定义全功能切换函数 (替换掉你原来的那段)
+function changeHomeMode(mode) {
+    const iphone = document.getElementById('iphone');
+    
+    // 获取 Page 2 的两个布局
+    const androidLayout2 = document.getElementById('layout-android-style');
+    const iosLayout2 = document.getElementById('layout-ios-style');
+    
+    // 【新增】获取 Page 1 的两个布局
+    const androidLayout1 = document.getElementById('page1-android-style');
+    const iosLayout1 = document.getElementById('page1-ios-style');
+    
+    const checkAndroid = document.getElementById('check-android');
+    const checkIos = document.getElementById('check-ios');
+
+    if (mode === 'ios') {
+        if(iphone) { iphone.classList.add('mode-ios'); iphone.classList.remove('mode-android'); }
+
+        // 控制 Page 2 显示 iOS，隐藏安卓
+        if(androidLayout2) androidLayout2.style.display = 'none';
+        if(iosLayout2) iosLayout2.style.display = 'block';
+
+        // 【新增】控制 Page 1 显示 iOS，隐藏安卓
+        if(androidLayout1) androidLayout1.style.display = 'none';
+        if(iosLayout1) iosLayout1.style.display = 'block';
+
+        if(checkIos) { checkIos.style.background = '#007aff'; checkIos.style.borderColor = '#007aff'; }
+        if(checkAndroid) { checkAndroid.style.background = 'none'; checkAndroid.style.borderColor = '#ccc'; }
+        
+        localStorage.setItem('homeMode', 'ios');
+    } else {
+        if(iphone) { iphone.classList.add('mode-android'); iphone.classList.remove('mode-ios'); }
+
+        // 控制 Page 2 显示安卓，隐藏 iOS
+        if(androidLayout2) androidLayout2.style.display = 'block';
+        if(iosLayout2) iosLayout2.style.display = 'none';
+
+        // 【新增】控制 Page 1 显示安卓，隐藏 iOS
+        if(androidLayout1) androidLayout1.style.display = 'block';
+        if(iosLayout1) iosLayout1.style.display = 'none';
+
+        if(checkAndroid) { checkAndroid.style.background = '#007aff'; checkAndroid.style.borderColor = '#007aff'; }
+        if(checkIos) { checkIos.style.background = 'none'; checkIos.style.borderColor = '#ccc'; }
+
+        localStorage.setItem('homeMode', 'android');
+    }
+}
+
+
+
+// 2. 自动初始化逻辑：当网页一打开，就执行下面的代码
+window.addEventListener('DOMContentLoaded', () => {
+    // 检查浏览器有没有记过之前的选择
+    const savedMode = localStorage.getItem('homeMode') || 'android'; // 如果没记过，默认用安卓
+    
+    // 执行一次切换函数，确保页面显示正确
+    changeHomeMode(savedMode);
+});
+/* ============================================================
+   iOS 全局手势引擎 (下拉唤起、上滑返回)
+   ============================================================ */
+
+// 1. 准备变量记录手指位置
+let startX = 0;
+let startY = 0;
+
+// 获取手机外壳容器
+const phoneContainer = document.getElementById('iphone');
+
+// 2. 监听手指按下
+phoneContainer.addEventListener('touchstart', function(e) {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+}, {passive: true});
+
+// 3. 监听手指抬起
+phoneContainer.addEventListener('touchend', function(e) {
+    let endX = e.changedTouches[0].clientX;
+    let endY = e.changedTouches[0].clientY;
+
+    let diffX = endX - startX;
+    let diffY = endY - startY; // 下拉为正，上滑为负
+    
+    let screenWidth = phoneContainer.offsetWidth;
+    let screenHeight = phoneContainer.offsetHeight;
+
+    // --- 逻辑 A: 顶部下拉手势 ---
+    // 触发条件：手指从顶部 100 像素内开始，且向下滑动距离超过 50 像素
+    if (startY < 100 && diffY > 50) {
+        if (startX < screenWidth / 2) {
+            // A1: 左半边下拉 -> 唤起锁屏
+            document.getElementById('layer-lock-screen').classList.remove('screen-hidden');
+        } else {
+            // A2: 右半边下拉 -> 唤起控制中心
+            document.getElementById('layer-control-center').classList.remove('screen-hidden');
+        }
+    }
+
+   /* ============================================================
+   【全能交互模块 - 无错版】
+   ============================================================ */
+
+// 1. 变量定义
+let cc_startY_fixed = 0;
+
+// 2. 监听开始触摸
+document.addEventListener('touchstart', function(e) {
+    cc_startY_fixed = e.touches[0].clientY;
+}, {passive: true});
+
+// 3. 监听触摸结束 (上滑返回)
+document.addEventListener('touchend', function(e) {
+    const screenHeight = window.innerHeight;
+    const endY = e.changedTouches[0].clientY;
+    const diffY = endY - cc_startY_fixed;
+
+    if (cc_startY_fixed > (screenHeight - 100) && diffY < -50) {
+        // 执行关闭
+        const overlays = document.querySelectorAll('.full-overlay');
+        overlays.forEach(l => l.classList.add('screen-hidden'));
+        
+        const edits = document.querySelectorAll('.full-screen-edit');
+        edits.forEach(p => p.classList.remove('active'));
+
+        if (typeof closeApp === 'function') closeApp();
+    }
+}, {passive: true});
+
+// 4. 监听点击背景
+document.addEventListener('click', function(e) {
+    const cc = document.getElementById('control-center');
+    if (cc && e.target === cc) {
+        const overlays = document.querySelectorAll('.full-overlay');
+        overlays.forEach(l => l.classList.add('screen-hidden'));
+        if (typeof closeApp === 'function') closeApp();
+    }
+});})

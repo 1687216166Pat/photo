@@ -656,3 +656,328 @@ body.dark-mode .text-area div {
     color: rgba(255, 255, 255, 0.9) !important;
     text-shadow: 0 1px 3px rgba(0,0,0,0.3) !important;
 }
+/* --- iOS 极简悬浮美化 --- */
+
+/* 让日历组件和艺术画组件在 iOS 模式下透明 */
+.iphone-screen.mode-ios .calendar-widget, 
+.iphone-screen.mode-ios .art-widget {
+    background: transparent !important; /* 去掉白色背景 */
+    box-shadow: none !important;        /* 去掉阴影 */
+    backdrop-filter: none !important;   /* 去掉毛玻璃效果 */
+    border: none !important;            /* 去掉边框 */
+}
+
+/* 调整日历文字颜色，确保在奶油色壁纸上清晰 */
+.iphone-screen.mode-ios .cal-number {
+    color: #333 !important; /* 深灰色数字 */
+    font-weight: 400;
+}
+
+.iphone-screen.mode-ios .cal-red-text {
+    color: #ff3b30 !important; /* 保持苹果红 */
+}
+
+/* 让 Dock 栏在 iOS 模式下更透明，不遮挡壁纸 */
+.iphone-screen.mode-ios .dock {
+    background: rgba(255, 255, 255, 0.15) !important; 
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+/* --- 全局覆盖层基础 (锁屏 & 控制中心) --- */
+.full-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000; /* 确保在所有 App 之上 */
+    background: rgba(0, 0, 0, 0.3); /* 半透明黑底 */
+    backdrop-filter: blur(30px);   /* iOS 核心毛玻璃 */
+    -webkit-backdrop-filter: blur(30px);
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); /* 丝滑的滑动手感 */
+    display: flex;
+    flex-direction: column;
+    pointer-events: auto; /* 确保能点到里面的东西 */
+}
+
+/* 默认状态：把层藏在屏幕上方 */
+.screen-hidden {
+    transform: translateY(-100%);
+    pointer-events: none; /* 藏起来时不能挡住主屏幕点击 */
+}
+
+/* --- 锁屏界面专用美化 --- */
+#layer-lock-screen {
+    background: rgba(0, 0, 0, 0.4); /* 锁屏稍微深色一点 */
+}
+
+.lock-clock {
+    text-align: center;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+/* --- 底部 Home Bar (手势条) - 修正居中版 --- */
+.home-gesture-bar {
+    position: absolute;
+    bottom: 8px;
+    /* 👇 下面这三行是实现绝对居中的“黄金组合” */
+    left: 0;
+    right: 0;
+    margin: 0 auto; 
+    
+    width: 120px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    z-index: 11000; /* 全系统最高层 */
+    pointer-events: none; /* 不影响点击操作 */
+}
+/* 控制中心顶部覆盖层 - 修正版 */
+.cc-status-cover {
+    width: 100%;             /* 强制撑满全屏宽度 */
+    box-sizing: border-box;   /* 确保 padding 不会挤爆宽度 */
+    height: 44px;            /* 与原生状态栏高度一致 */
+    display: flex;
+    justify-content: space-between; /* 确保一左一右 */
+    align-items: center;
+    padding: 0 25px;         /* 左右留出呼吸空隙 */
+    position: absolute;      /* 绝对定位在最顶端 */
+    top: 0;
+    left: 0;
+    z-index: 10001;
+}
+
+.cc-icon-left {
+    color: white;
+    font-size: 28px;         /* 加号稍微大一点点 */
+    font-weight: 300;
+    cursor: pointer;
+    line-height: 44px;
+}
+
+.cc-icon-right {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    height: 44px;
+}
+
+
+/* 音乐文本区样式 */
+.cc-music-area {
+    margin-top: 40px; /* 符号下方的空格 */
+    text-align: center;
+    color: white;
+    padding: 0 20px;
+}
+
+.cc-music-text {
+    font-size: 14px;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+    font-family: monospace; /* 使用等宽字体确保符号对齐 */
+    opacity: 0.9;
+}
+
+.cc-music-controls {
+    font-size: 18px;
+    word-spacing: 10px;
+}
+
+/* 后续内容容器 */
+#cc-main-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+/* 控制中心详细状态栏布局 */
+.cc-detailed-status {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between; /* 左右拉开 */
+    align-items: center;
+    padding: 0 25px;
+    margin-top: 25px; /* 与上方音乐文本的间距 */
+    color: white;
+}
+
+/* 左侧容器：信号、运营商、WiFi */
+.cc-status-left {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* 图标之间的间距 */
+}
+
+.cc-carrier {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* 右侧容器：锁定、专注、百分比、电池 */
+.cc-status-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cc-status-icon {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.cc-bat-percent {
+    font-size: 13px;
+    font-weight: 600;
+    margin-left: 2px;
+}
+
+/* 强制复用主状态栏的信号条样式 */
+.cc-detailed-status .sb-signal {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    width: 18px;
+    height: 12px;
+}
+
+.cc-detailed-status .sb-signal .bar {
+    width: 3px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 1px;
+}
+
+.cc-detailed-status .sb-signal .bar.active {
+    background: white;
+}
+
+/* ============================================================
+   控制中心：镜像对齐版 (左右列完全对称)
+   ============================================================ */
+
+/* --- 1. 左右列总容器 (确保平分，不挤压) --- */
+.cc-columns-container {
+    display: flex;
+    padding: 0 25px;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.cc-left-column, .cc-right-column {
+    flex: 1; /* 👈 关键：确保左右两半边宽度绝对相等，这样图标就不会挤在一起 */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* --- 还原你最满意的 CSS 格式 --- */
+
+.cc-square-card {
+    aspect-ratio: 1 / 1;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 28px;
+    padding: 15px;
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.cc-icon-row {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center; /* 👈 增加这行确保图标垂直居中，不被拉伸 */
+}
+
+.cc-btn-circle {
+    aspect-ratio: 1 / 1;
+    flex: 1;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+    min-height: 50px;
+}
+
+/* 针对第二行专注模式：仅增加内边距加宽，不改格式 */
+.cc-icon-row:nth-child(3) .cc-btn-circle {
+    aspect-ratio: auto;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 0 20px; /* 👈 仅通过这里加宽 */
+}
+
+/* --- 修复滑块图标消失的 Bug，保持原有格式 --- */
+
+.cc-vertical-slider {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 22px;
+    position: relative; /* 👈 必须有这个，子元素定位才准 */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+
+.slider-fill {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.25);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 1; /* 👈 设为底层 */
+}
+
+.slider-icon {
+    position: absolute;
+    bottom: 12px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 16px;
+    color: white;
+    z-index: 10 !important; /* 👈 核心修复：确保图标在填充色之上，不会消失 */
+    pointer-events: none;
+}
+
+
+/* 确保 cc-icon-row 垂直居中，防止图标变扁 */
+.cc-icon-row {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center; 
+}
+
+
+/* 信号卡片 2x2 网格 (保持原样) */
+.cc-connectivity-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 12px;
+    padding: 14px !important;
+    box-sizing: border-box;
+}
+.cc-grid-item { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+.cc-circle-icon { width: 52px; height: 52px; background: rgba(255, 255, 255, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+.cc-mini-quad { width: 52px; height: 52px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.cc-mini-dot { background: rgba(255, 255, 255, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; }

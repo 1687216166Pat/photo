@@ -1397,6 +1397,97 @@ window.switchPhoneTab = function(tabName) {
         renderRecents();
     }
 };
+1
+/* ============================================================
+   组件中心控制逻辑 - 稳定版
+   ============================================================ */
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. 获取元素
+    const widgetBtn = document.getElementById('add-widget-btn');
+    const widgetCenter = document.getElementById('widget-center');
+    const cc = document.getElementById('control-center');
+
+    // 2. 调试日志 (按 F12 可以在控制台看到)
+    console.log("--- 组件中心初始化检查 ---");
+    console.log("按钮存在:", !!widgetBtn);
+    console.log("面板存在:", !!widgetCenter);
+
+    // 3. 绑定点击事件
+    if (widgetBtn && widgetCenter) {
+        widgetBtn.addEventListener('click', function(e) {
+            // 阻止事件冒泡 (防止触发背景点击)
+            e.stopPropagation();
+            
+            console.log("🧩 按钮被点击了！正在弹出组件中心...");
+
+            // 第一步：弹出组件中心
+            widgetCenter.classList.add('active');
+
+            // 第二步：稍微延迟一点再关掉控制中心 (为了动画更顺滑)
+            setTimeout(() => {
+                if (cc) cc.classList.add('screen-hidden');
+            }, 100);
+        });
+    }
+
+    // 4. 点击组件中心外部（顶部空白处）关闭
+    if (widgetCenter) {
+        widgetCenter.addEventListener('click', function(e) {
+            if (e.target === widgetCenter) {
+                widgetCenter.classList.remove('active');
+                console.log("点击背景，关闭组件中心");
+            }
+        });
+    }
+});
+document.addEventListener('DOMContentLoaded', function() {
+    const widgetBtn = document.getElementById('add-widget-btn');
+    const wrapper = document.getElementById('widget-center-wrapper');
+    const cc = document.getElementById('control-center');
+
+    // 1. 点击 🧩 按钮：切换页面
+    if (widgetBtn && wrapper) {
+        widgetBtn.addEventListener('click', function(e) {
+            e.stopPropagation(); // 阻止冒泡
+            
+            // 第一步：隐藏控制中心（露出主屏幕）
+            if (cc) cc.classList.add('screen-hidden');
+            
+            // 第二步：弹出组件中心
+            wrapper.classList.add('active');
+            console.log("已切换至组件中心");
+        });
+    }
+
+    // 2. 点击上方空白区域：关闭组件中心
+    if (wrapper) {
+        wrapper.addEventListener('click', function(e) {
+            // 【关键判定】：如果点击的目标正好是 wrapper 本身（即面板上方的透明区）
+            if (e.target === wrapper) {
+                wrapper.classList.remove('active');
+                console.log("点击空白处，返回主屏幕");
+            }
+        });
+    }
+
+    // 3. 点击具体的小组件：选中逻辑
+    const widgets = document.querySelectorAll('.selectable-widget');
+    widgets.forEach(widget => {
+        widget.addEventListener('click', function(e) {
+            e.stopPropagation(); // 【非常重要】：防止点击组件时也触发了 wrapper 的关闭逻辑
+            
+            const widgetName = this.getAttribute('data-name');
+            console.log("你选择了组件:", widgetName);
+            
+            // 这里可以写你具体的添加逻辑，比如：
+            // alert("已选择 " + widgetName + "，准备添加到桌面...");
+            
+            // 通常选择完后也会关闭面板
+            wrapper.classList.remove('active');
+        });
+    });
+});
 
 // 导出所有新函数
 window.getRoleReply = getRoleReply;

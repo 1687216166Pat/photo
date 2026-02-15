@@ -40,55 +40,77 @@
 
     <!-- 分页容器 -->
     <div class="pages-container" id="pagesContainer">
-        <!-- 第1页 -->
-        <div class="page page-1"></div>
+        <!-- 第1页 (双模全隔离版 - 当前两模均为空白) -->
+        <div class="page page-1">
+            <!-- 【方案 A】安卓模式的第一页内容 (预留位) -->
+            <div id="page1-android-style">
+                <!-- 以后你想在安卓的第一页放搜索框或负一屏组件，就写在这里 -->
+            </div>
 
-        <!-- 第2页：主页 -->
+            <!-- 【方案 B】iOS 模式的第一页内容 (保持空白) -->
+            <div id="page1-ios-style" style="display:none;">
+                <!-- 保持绝对空白 -->
+            </div>
+        </div>
+
+
+        <!-- 第2页：主页 (双模全隔离版 - iOS模式当前为空白) -->
         <div class="page page-2" id="pageMain">
-            <div class="top-widgets">
-                <div class="anniversary-widget">
-                    <div class="anni-content">
-                        <div class="anni-title">恋爱纪念日</div>
-                        <div class="anni-days" id="anni-days">365</div>
-                        <div class="anni-date">Days Together</div>
-                    </div>
-                </div>
-                <div class="weather-widget" id="weather-widget">
-                    <div class="weather-left">
-                        <div class="weather-temp" id="w-temp">--°</div>
-                        <div class="weather-desc" id="w-desc">点击刷新</div>
-                    </div>
-                    <div class="weather-right">
-                        <div class="weather-city" id="w-city">定位中...</div>
-                    </div>
-                </div>
-            </div>
-            <div class="info-banner">
-                <div class="icon-box">
-                    <img id="info-banner-img" src="https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=100" style="width:100%;height:100%;object-fit:cover">
-                </div>
-                <div class="text-area">
-                    <div style="font-weight:bold;">今日箴言</div>
-                    <div style="font-size:13px;opacity:0.8">保持热爱，共赴山海。</div>
-                </div>
-            </div>
             
-            <!-- 尺子立牌组件 -->
-            <div class="ruler-widget-container">
-                <div class="ruler-track" id="rulerTrack">
-                    <div class="badge-stand" id="badgeStand">
-                        <div class="stand-bubble" id="standBubble">我爱你</div>
-                        <div class="badge-circle">
-                            <img id="badge-img" src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=100&q=80" style="width:100%;height:100%;object-fit:cover">
+            <!-- 【方案 A】安卓灵感/自定义美化布局 (保持不变) -->
+            <div id="layout-android-style">
+                <div class="top-widgets">
+                    <div class="anniversary-widget">
+                        <div class="anni-content">
+                            <div class="anni-title">恋爱纪念日</div>
+                            <div class="anni-days" id="anni-days">365</div>
+                            <div class="anni-date">Days Together</div>
                         </div>
-                        <div class="badge-base"></div>
+                    </div>
+                    <div class="weather-widget" id="weather-widget">
+                        <div class="weather-left">
+                            <div class="weather-temp" id="w-temp">--°</div>
+                            <div class="weather-desc" id="w-desc">点击刷新</div>
+                        </div>
+                        <div class="weather-right">
+                            <div class="weather-city" id="w-city">定位中...</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-banner">
+                    <div class="icon-box">
+                        <img id="info-banner-img" src="https://cdn.jsdelivr.net/gh/1687216166Pat/photo@main/IMG_3615.jpeg" style="width:100%;height:100%;object-fit:cover">
+                    </div>
+                    <div class="text-area">
+                        <div style="font-weight:bold;">今日箴言</div>
+                        <div style="font-size:13px;opacity:0.8">保持热爱，共赴山海。</div>
+                    </div>
+                </div>
+                
+                <!-- 尺子立牌组件 -->
+                <div class="ruler-widget-container">
+                    <div class="ruler-track" id="rulerTrack">
+                        <div class="badge-stand" id="badgeStand">
+                            <div class="stand-bubble" id="standBubble">我爱你</div>
+                            <div class="badge-circle">
+                                <img id="badge-img" src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=100&q=80" style="width:100%;height:100%;object-fit:cover">
+                            </div>
+                            <div class="badge-base"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- App 图标网格 -->
+
+            <!-- 【方案 B】iOS 极简布局 (当前已清空，实现完全空白，预留未来添加新组件) -->
+            <div id="layout-ios-style" style="display:none;">
+                <!-- 💡 这里目前没有任何内容，所有App已移位到第三页 -->
+                <!-- 以后你想在第二页添加新组件时，直接将代码写在这里即可 -->
+            </div>
             
         </div>
+
+
+
 
         <!-- 第3页：App 库 -->
         <div class="page page-3">
@@ -212,7 +234,7 @@
             </div>
         </div>
 
-        <!-- 显示与亮度设置页 -->
+        <!-- 显示与亮度设置页 (已整合主屏幕样式切换) -->
         <div class="chat-full-layer" id="display-settings-layer">
             <div class="header">
                 <button class="header-btn" onclick="hideLayer('display-settings-layer')">‹ 设置</button>
@@ -220,6 +242,7 @@
                 <div style="width:60px"></div>
             </div>
             <div class="ios-list-container">
+                <!-- 第一个卡片：外观设置（深浅色） -->
                 <div class="ios-group-card">
                     <div class="appearance-selector">
                         <div class="mode-option" onclick="setAppearanceMode('light')">
@@ -254,8 +277,30 @@
                         <div style="color:var(--text-secondary)">〉</div>
                     </div>
                 </div>
+
+                <!-- 新增第二个卡片：主屏幕样式切换 -->
+                <div class="ios-group-card" style="margin-top: 20px;">
+                    <div class="list-row" style="padding:10px 15px; font-size:12px; color:var(--text-secondary); background:transparent; border:none;">
+                        主屏幕样式
+                    </div>
+                    <div class="list-row" onclick="changeHomeMode('android')">
+                        <div style="flex:1">安卓灵感 (当前美化)</div>
+                        <!-- 这个小圆点用来标记选中状态 -->
+                        <div id="check-android" style="width:12px; height:12px; border:2px solid #007aff; border-radius:50%; background:#007aff;"></div>
+                    </div>
+                    <div class="list-row" onclick="changeHomeMode('ios')">
+                        <div style="flex:1">iOS 经典 (仿制模式)</div>
+                        <!-- 这个小圆点默认为空 -->
+                        <div id="check-ios" style="width:12px; height:12px; border:2px solid #ccc; border-radius:50%; background:none;"></div>
+                    </div>
+                </div>
+                <div style="padding: 0 15px; font-size: 12px; color: #8e8e93; margin-top: 8px;">
+                    选择“安卓灵感”以保留您的自定义美化组件，选择“iOS 经典”以获得更接近原生的体验。
+                </div>
+
             </div>
         </div>
+
 
         <!-- 自动外观选项页 -->
         <div class="chat-full-layer" id="display-options-layer">
@@ -873,6 +918,252 @@
                 <svg viewBox="0 0 24 24" width="32" fill="white"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-2.2 2.2a15.057 15.057 0 01-6.59-6.59l2.2-2.21a.96.96 0 00.25-1.01A11.36 11.36 0 018.59 3.99C8.59 3.45 8.14 3 7.6 3H4.19C3.65 3 3 3.24 3 7.5c0 10.19 8.31 18.5 18.5 18.5 4.29 0 4.5-.65 4.5-1.19V21.4c0-.55-.45-1-1-1h-3.41c-.55 0-1.05-.45-1.08-.98z"/></svg>
             </div>
             <span style="color:white; font-size:14px;">接听</span>
+        </div>
+    </div>
+    </div> <!-- incoming-call-screen 结束 -->
+
+    <!-- ============================================================
+         三大全局覆盖层 (锁屏、控制中心、手势条)
+         ============================================================ -->
+
+    <!-- 1. 左上角下拉：锁屏/通知中心 -->
+    <div id="layer-lock-screen" class="full-overlay screen-hidden">
+        <div class="lock-clock">
+            <div id="lock-time" style="font-size: 80px; font-weight: 200; margin-top: 100px; text-align: center; color: white;">12:00</div>
+            <div id="lock-date" style="font-size: 20px; opacity: 0.8; text-align: center; color: white;">10月24日 星期四</div>
+        </div>
+        <div style="position: absolute; bottom: 100px; width: 100%; text-align: center; opacity: 0.5; font-size: 14px; color: white;">
+            向上轻扫以解锁
+        </div>
+    </div>
+
+<!-- 2. 右上角下拉：控制中心 (iOS 18 风格重制版) -->
+<div id="layer-control-center" class="full-overlay screen-hidden">
+    
+    <!-- 1. 顶部符号栏 (修正版：使用 SVG 确保显示) -->
+    <div class="cc-status-cover">
+        <!-- 左侧加号 -->
+        <div class="cc-icon-left" onclick="alert('编辑模式')">+</div>
+        
+        <!-- 右侧电源键 (使用 SVG 图标) -->
+        <div class="cc-icon-right" onclick="alert('关机菜单')">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+                <line x1="12" y1="2" x2="12" y2="12"></line>
+            </svg>
+        </div>
+    </div>
+
+
+    <!-- 2. 音乐播放器文本区 -->
+    <div class="cc-music-area">
+        <div class="cc-music-text">━━━━━━●──────⇆0：30</div>
+        <div class="cc-music-controls">◁ ㅤㅤ❚❚ ㅤㅤ ▷ ㅤㅤ ↻</div>
+    </div>
+
+    <!-- 3. 详细状态信息栏 (仿 iOS 18 风格) -->
+    <div class="cc-detailed-status">
+        <!-- 左侧：信号、运营商、WiFi -->
+        <div class="cc-status-left">
+            <div class="sb-signal">
+                <div class="bar active" style="height:40%"></div>
+                <div class="bar active" style="height:60%"></div>
+                <div class="bar active" style="height:80%"></div>
+                <div class="bar active" style="height:100%"></div>
+            </div>
+            <div class="cc-carrier">中国移动</div>
+            <div class="sb-wifi">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="white">
+                    <path d="M12,4.5c4.5,0,8.6,1.8,11.5,4.7l-2.1,2.5c-2.4-2.4-5.7-3.9-9.4-3.9s-7,1.5-9.4,3.9L0.5,9.2 C3.4,6.3,7.5,4.5,12,4.5z M12,10.5c2.7,0,5.2,1.1,6.9,2.8l-2.1,2.5c-1.2-1.2-2.9-1.9-4.8-1.9s-3.6,0.7-4.8,1.9L5.1,13.3 C6.8,11.6,9.3,10.5,12,10.5z M12,16.5c0.9,0,1.8,0.4,2.4,1l-2.4,2.9l-2.4-2.9C10.2,16.9,11.1,16.5,12,16.5z"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- 中间留空 (由 CSS 的 justify-content 实现) -->
+
+        <!-- 右侧：竖排锁定、专注模式、电量数值、电池图标 -->
+        <div class="cc-status-right">
+            <!-- 竖排锁定 -->
+            <div class="cc-status-icon">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="white" stroke-width="2.5">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+            </div>
+            <!-- 专注模式 (月亮) -->
+            <div class="cc-status-icon">🌙</div>
+            <!-- 详细电量 -->
+            <div class="cc-bat-percent">100%</div>
+            <!-- 电池图标 -->
+            <div class="sb-battery" style="width:22px; height:11px; margin-left:5px;">
+                <div class="sb-bat-level" style="width:100%; height:100%; background:white;"></div>
+            </div>
+        </div>
+    </div>
+    <!-- 4. 控制中心主功能区 (左右分列布局 - 替换版) -->
+    <div class="cc-columns-container" style="display: flex; padding: 0 25px; gap: 15px; margin-top: 20px;">
+        
+        <!-- 【左侧半区列】 -->
+        <div class="cc-left-column" style="flex: 1; display: flex; flex-direction: column; gap: 15px;">
+            
+            <!-- 信号组合卡 (保持 2x2 象限版) -->
+            <div class="cc-square-card cc-connectivity-grid" style="margin: 0; width: 100%;">
+                <div class="cc-grid-item"><div class="cc-circle-icon">✈️</div></div>
+                <div class="cc-grid-item"><div class="cc-circle-icon">📡</div></div>
+                <div class="cc-grid-item">
+                    <div class="cc-circle-icon" style="background: #007aff;">
+                        <div class="sb-wifi cc-wifi-inner">
+                            <svg viewBox="0 0 24 24"><path d="M12,4.5c4.5,0,8.6,1.8,11.5,4.7l-2.1,2.5c-2.4-2.4-5.7-3.9-9.4-3.9s-7,1.5-9.4,3.9L0.5,9.2 C3.4,6.3,7.5,4.5,12,4.5z M12,10.5c2.7,0,5.2,1.1,6.9,2.8l-2.1,2.5c-1.2-1.2-2.9-1.9-4.8-1.9s-3.6,0.7-4.8,1.9L5.1,13.3 C6.8,11.6,9.3,10.5,12,10.5z M12,16.5c0.9,0,1.8,0.4,2.4,1l-2.4,2.9l-2.4-2.9C10.2,16.9,11.1,16.5,12,16.5z"/></svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="cc-grid-item">
+                    <div class="cc-mini-quad">
+                        <div class="cc-mini-dot">📶</div><div class="cc-mini-dot">🦷</div>
+                        <div class="cc-mini-dot">🔗</div><div class="cc-mini-dot">🔒</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第一行：锁定、屏幕镜像 -->
+            <div class="cc-icon-row">
+                <div class="cc-btn-circle">🔓</div>
+                <div class="cc-btn-circle">📺</div>
+            </div>
+
+            <!-- 第二行：专注模式 (胶囊形) -->
+            <div class="cc-icon-row focus-mode-row">
+                <div class="cc-btn-circle" style="width: 100%; aspect-ratio: auto; border-radius: 30px; font-size: 14px; gap: 8px;">
+                    <span>🌙</span> 专注模式
+                </div>
+            </div>
+
+            <!-- 第三行：手电筒、计时器 -->
+            <div class="cc-icon-row">
+                <div class="cc-btn-circle">🔦</div>
+                <div class="cc-btn-circle">⏱️</div>
+            </div>
+
+            <!-- 第四行：录屏、深浅模式 -->
+            <div class="cc-icon-row">
+                <div class="cc-btn-circle">⏺️</div>
+                <div class="cc-btn-circle">🌓</div>
+            </div>
+        </div>
+
+<!-- 【右侧半区列】 -->
+<div class="cc-right-column" style="flex: 1; display: flex; flex-direction: column; gap: 15px;">
+    
+    <!-- 区域 D: 音乐播放器 (对应左侧信号卡 A) -->
+    <div class="cc-square-card cc-music-player" style="margin: 0; width: 100%; aspect-ratio: 1/1; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <div style="font-size: 24px;">🎵</div>
+        <div style="font-size: 11px; opacity: 0.6; margin-top: 5px;">未在播放</div>
+        <div style="font-size: 14px; margin-top: 10px; letter-spacing: 5px;">◁ ❚❚ ▷</div>
+    </div>
+
+    <!-- 区域 F: 亮度与音量条 (对应左侧区域 B: 锁定+镜像+专注模式) -->
+    <!-- 我们设定高度为 135px 来匹配左侧两行的高度 -->
+    <div class="cc-sliders-area" style="height: 135px; display: flex; gap: 15px;">
+        <div class="cc-vertical-slider" style="flex: 1; background: rgba(255,255,255,0.2); border-radius: 20px; position: relative; overflow: hidden;">
+            <div class="slider-fill" style="height: 65%; background: white; width: 100%; position: absolute; bottom: 0;"></div>
+            <div style="position: absolute; bottom: 10px; width: 100%; text-align: center; font-size: 14px;">☀️</div>
+        </div>
+        <div class="cc-vertical-slider" style="flex: 1; background: rgba(255,255,255,0.2); border-radius: 20px; position: relative; overflow: hidden;">
+            <div class="slider-fill" style="height: 45%; background: white; width: 100%; position: absolute; bottom: 0;"></div>
+            <div style="position: absolute; bottom: 10px; width: 100%; text-align: center; font-size: 14px;">🔊</div>
+        </div>
+    </div>
+
+    <!-- 区域 E: 底部功能厅 (对应左侧区域 C: 手电筒+计时器+录屏+深浅模式) -->
+    <!-- 高度同样设定为 135px -->
+    <div class="cc-bottom-functions" style="height: 135px; display: flex; flex-direction: column; gap: 15px;">
+        <!-- 上半部分：小组件卡片 (占据原来一行的高度) -->
+        <div class="cc-square-card" id="add-widget-btn" style="flex: 1; margin: 0; display: flex; justify-content: center; align-items: center; font-size: 18px; border-radius: 20px; cursor: pointer;">
+         🧩 组件
+        </div>
+        <!-- 下半部分：电池图标 (占据原来一行的高度) -->
+        <div style="flex: 1; display: flex; justify-content: flex-end;">
+            <div class="cc-circle-btn" style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; justify-content: center; align-items: center;">
+                <div style="position: relative; width: 22px; height: 11px; border: 1.2px solid white; border-radius: 2.5px; padding: 1px; display: flex;">
+                    <div style="width: 30%; height: 100%; background: white;"></div>
+                    <div style="position: absolute; right: -3.5px; top: 2.5px; width: 1.5px; height: 4px; background: white; border-radius: 0 1px 1px 0;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <!-- 3. 底部手势指示条 (Home Bar) -->
+    <div class="home-gesture-bar"></div>
+
+</div> <!-- 👈 【关键修复】这是整个 id="iphone" 容器的封口标签 -->
+
+<!-- 1. 新增：外层包裹容器，用于探测“上方空白区域”的点击 -->
+<div id="widget-center-wrapper" class="widget-center-wrapper">
+
+    <!-- 2. 你原本的面板容器 -->
+    <div id="widget-center" class="widget-center">
+        <!-- 顶部的装饰条 -->
+        <div class="drag-handle"></div>
+        
+        <!-- 搜索栏 -->
+        <div class="widget-search-container">
+            <div class="search-inner">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="搜索小组件" readonly>
+            </div>
+        </div>
+
+        <!-- 组件内容区域 -->
+        <div class="widget-content-scroll">
+            <div id="layout-android-style">
+                
+                <div class="top-widgets">
+                    <!-- 3. 在每个组件上增加 selectable-widget 类名 -->
+                    <div class="anniversary-widget selectable-widget" data-name="恋爱纪念日">
+                        <div class="anni-content">
+                            <div class="anni-title">恋爱纪念日</div>
+                            <div class="anni-days" id="anni-days">365</div>
+                            <div class="anni-date">Days Together</div>
+                        </div>
+                    </div>
+                    
+                    <div class="weather-widget selectable-widget" id="weather-widget" data-name="天气">
+                        <div class="weather-left">
+                            <div class="weather-temp" id="w-temp">--°</div>
+                            <div class="weather-desc" id="w-desc">点击刷新</div>
+                        </div>
+                        <div class="weather-right">
+                            <div class="weather-city" id="w-city">定位中...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-banner selectable-widget" data-name="今日箴言">
+                    <div class="icon-box">
+                        <img id="info-banner-img" src="https://cdn.jsdelivr.net/gh/1687216166Pat/photo@main/IMG_3615.jpeg" style="width:100%;height:100%;object-fit:cover">
+                    </div>
+                    <div class="text-area">
+                        <div style="font-weight:bold;">今日箴言</div>
+                        <div style="font-size:13px;opacity:0.8">保持热爱，共赴山海。</div>
+                    </div>
+                </div>
+                
+                <!-- 尺子立牌组件 -->
+                <div class="ruler-widget-container selectable-widget" data-name="尺子立牌">
+                    <div class="ruler-track" id="rulerTrack">
+                        <div class="badge-stand" id="badgeStand">
+                            <div class="stand-bubble" id="standBubble">我爱你</div>
+                            <div class="badge-circle">
+                                <img id="badge-img" src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=100&q=80" style="width:100%;height:100%;object-fit:cover">
+                            </div>
+                            <div class="badge-base"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>
