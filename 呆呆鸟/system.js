@@ -335,16 +335,17 @@ function setScheduleType(type) {
  * 主屏幕模式切换逻辑 (双模方案)
  * ============================================================
  */
-
-// 1. 定义全功能切换函数 (替换掉你原来的那段)
+/* ============================================================
+   【2. system.js - 主屏幕模式切换逻辑 (记忆增强版)】
+   ============================================================ */
 function changeHomeMode(mode) {
     const iphone = document.getElementById('iphone');
     
-    // 获取 Page 2 的两个布局
+    // 获取 Page 2 的布局
     const androidLayout2 = document.getElementById('layout-android-style');
     const iosLayout2 = document.getElementById('layout-ios-style');
     
-    // 【新增】获取 Page 1 的两个布局
+    // 获取 Page 1 的布局
     const androidLayout1 = document.getElementById('page1-android-style');
     const iosLayout1 = document.getElementById('page1-ios-style');
     
@@ -352,48 +353,52 @@ function changeHomeMode(mode) {
     const checkIos = document.getElementById('check-ios');
 
     if (mode === 'ios') {
+        // --- 执行视觉切换 ---
         if(iphone) { iphone.classList.add('mode-ios'); iphone.classList.remove('mode-android'); }
 
-        // 控制 Page 2 显示 iOS，隐藏安卓
         if(androidLayout2) androidLayout2.style.display = 'none';
         if(iosLayout2) iosLayout2.style.display = 'block';
 
-        // 【新增】控制 Page 1 显示 iOS，隐藏安卓
         if(androidLayout1) androidLayout1.style.display = 'none';
         if(iosLayout1) iosLayout1.style.display = 'block';
 
         if(checkIos) { checkIos.style.background = '#007aff'; checkIos.style.borderColor = '#007aff'; }
         if(checkAndroid) { checkAndroid.style.background = 'none'; checkAndroid.style.borderColor = '#ccc'; }
         
-        localStorage.setItem('homeMode', 'ios');
+        // --- 执行记忆同步 ---
+        window.phoneState.mode = 'ios'; // 存入大脑记录
+        window.saveAllToLocal();        // 写入手机内存
+
     } else {
+        // --- 执行视觉切换 ---
         if(iphone) { iphone.classList.add('mode-android'); iphone.classList.remove('mode-ios'); }
 
-        // 控制 Page 2 显示安卓，隐藏 iOS
         if(androidLayout2) androidLayout2.style.display = 'block';
         if(iosLayout2) iosLayout2.style.display = 'none';
 
-        // 【新增】控制 Page 1 显示安卓，隐藏 iOS
         if(androidLayout1) androidLayout1.style.display = 'block';
         if(iosLayout1) iosLayout1.style.display = 'none';
 
         if(checkAndroid) { checkAndroid.style.background = '#007aff'; checkAndroid.style.borderColor = '#007aff'; }
         if(checkIos) { checkIos.style.background = 'none'; checkIos.style.borderColor = '#ccc'; }
 
-        localStorage.setItem('homeMode', 'android');
+        // --- 执行记忆同步 ---
+        window.phoneState.mode = 'android'; // 存入大脑记录
+        window.saveAllToLocal();           // 写入手机内存
     }
 }
 
-
-
-// 2. 自动初始化逻辑：当网页一打开，就执行下面的代码
+// 自动初始化逻辑：当网页一打开，就执行下面的代码
 window.addEventListener('DOMContentLoaded', () => {
-    // 检查浏览器有没有记过之前的选择
-    const savedMode = localStorage.getItem('homeMode') || 'android'; // 如果没记过，默认用安卓
+    // 1. 从我们的“记忆大脑”里直接拿上次存好的模式
+    const savedMode = window.phoneState.mode; 
     
-    // 执行一次切换函数，确保页面显示正确
+    // 2. 执行切换函数，还原上次的界面
     changeHomeMode(savedMode);
+    
+    console.log("📱 欢迎回来，已为你还原上次的模式:", savedMode);
 });
+
 /* ============================================================
    iOS 全局手势引擎 (下拉唤起、上滑返回)
    ============================================================ */
@@ -473,3 +478,41 @@ document.addEventListener('click', function(e) {
         if (typeof closeApp === 'function') closeApp();
     }
 });})
+
+/* ============================================================
+   【Re phone 启动动画 - 修复强力版】
+   ============================================================ */
+
+function startRePhone() {
+    const ball = document.getElementById('loading-ball');
+    const screen = document.getElementById('startup-screen');
+
+    if (!screen) return;
+
+    // 1. 立即开始移动小球
+    if (ball) {
+        // 稍微延时一点点确保浏览器捕捉到起点
+        setTimeout(() => {
+            ball.style.left = '100%';
+        }, 50);
+    }
+
+    // 2. 无论页面加载多慢，3秒后准时淡出启动页
+    setTimeout(() => {
+        screen.style.opacity = '0';
+        screen.style.pointerEvents = 'none';
+        
+        // 3. 彻底移除
+        setTimeout(() => {
+            screen.remove();
+        }, 800);
+    }, 2800); // 2.8秒是给小球运动和回弹留出的总时间
+}
+
+// 只要 HTML 加载好就立刻执行，不等图片
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startRePhone);
+} else {
+    startRePhone();
+}
+在这里添加

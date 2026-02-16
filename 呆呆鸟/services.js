@@ -2,6 +2,40 @@
 // 【服务功能】
 // ============================================================
 
+/* ============================================================
+   【Re phone 中央数据库管理 - 最终统一版】
+   ============================================================ */
+
+// 1. 定义存储的“箱子”名字
+const PHONE_DATA_KEY = 're_phone_data_v1';
+
+// 2. 初始化：开机时直接去抽屉拿数据
+const savedData = localStorage.getItem(PHONE_DATA_KEY);
+
+window.phoneState = savedData ? JSON.parse(savedData) : {
+    mode: 'android',       // 默认模式 (android 或 ios)
+    widgets: [],           // 已添加的小组件
+    chats: [],             // 聊天记录
+    lastFortuneDate: ''    // 上次抽签日期
+};
+
+// 3. 统一保存函数 (对应你第二步代码里的调用)
+window.saveAllToLocal = function() {
+    localStorage.setItem(PHONE_DATA_KEY, JSON.stringify(window.phoneState));
+    console.log("✅ 系统数据已实时同步到本地存储");
+};
+
+// 4. (可选) 加载函数：如果其他地方需要手动加载
+window.loadPhoneState = function() {
+    const saved = localStorage.getItem(PHONE_DATA_KEY);
+    if (saved) {
+        window.phoneState = JSON.parse(saved);
+        return true;
+    }
+    return false;
+};
+
+
 // 1. API 功能
 function autoFixUrl(input) {
     let val = input.value.trim();

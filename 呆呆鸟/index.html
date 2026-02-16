@@ -7,7 +7,17 @@
     <!-- 替换原有的 viewport 标签 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
-    <title>iOS 终极适配 v15.6 (修复运行版)</title>
+    <!-- 1. 浏览器标签页显示的文字 -->
+    <title>even-ovo-hi</title>
+    <!-- 2. 添加到 iOS 桌面后，图标下方的文字 (可以自己随便改) -->
+    <meta name="apple-mobile-web-app-title" content="Re phone">
+    <!-- 3. 设置浏览器标签页的小图标 (Favicon) -->
+    <link rel="icon" type="image/png" href="heart.png">
+    <!-- 4. 设置 iOS 桌面图标 (Apple Touch Icon) -->
+    <link rel="apple-touch-icon" href="heart.png">
+    <!-- 5. 开启全屏模式 (让它看起来更像 App) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <!-- ✅ 修复点1：我已经帮你把钥匙换成了你现在的4个文件 -->
        <link rel="stylesheet" href="base.css">
@@ -15,32 +25,54 @@
     <link rel="stylesheet" href="apps.css">
     <link rel="stylesheet" href="modals.css">
    
-    href
+    <!-- 1. 在 <head> 里引入专业花体字 -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
 
 </head>
 <body>
 
-<div class="iphone-screen" id="iphone">
-    <!-- 状态栏 -->
-    <div class="status-bar">
-        <div class="sb-left" id="sb-time">12:00</div>
-        <div class="sb-right">
-            <div class="sb-signal">
-                <div class="bar active" style="height:40%"></div>
-                <div class="bar active" style="height:60%"></div>
-                <div class="bar active" style="height:80%"></div>
-                <div class="bar active" style="height:100%"></div>
-            </div>
-            <div class="sb-wifi">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12,4.5c4.5,0,8.6,1.8,11.5,4.7l-2.1,2.5c-2.4-2.4-5.7-3.9-9.4-3.9s-7,1.5-9.4,3.9L0.5,9.2 C3.4,6.3,7.5,4.5,12,4.5z M12,10.5c2.7,0,5.2,1.1,6.9,2.8l-2.1,2.5c-1.2-1.2-2.9-1.9-4.8-1.9s-3.6,0.7-4.8,1.9L5.1,13.3 C6.8,11.6,9.3,10.5,12,10.5z M12,16.5c0.9,0,1.8,0.4,2.4,1l-2.4,2.9l-2.4-2.9C10.2,16.9,11.1,16.5,12,16.5z"/>
-                </svg>
-            </div>
-            <div class="sb-battery">
-                <div class="sb-bat-level" id="sb-bat-level" style="width:100%"></div>
-            </div>
+<div id="startup-screen">
+    <div class="startup-content">
+        <h1 class="re-phone-logo">Re phone</h1>
+        <div class="progress-wrapper">
+            <div class="progress-line"></div>
+            <!-- 空心小球 -->
+            <div class="progress-ball" id="loading-ball"></div>
         </div>
     </div>
+</div>
+<div class="iphone-screen" id="iphone">
+<!-- 状态栏 -->
+<div class="status-bar">
+    <!-- 左侧：时间 + 像素小红心 -->
+    <div class="sb-left">
+        <span id="sb-time">12:00</span>
+        <span class="android-only-heart">🩷</span> <!-- 👈 新增：像素心 -->
+    </div>
+
+    <div class="sb-right">
+        <!-- 信号图标 -->
+        <div class="sb-signal">
+            <div class="bar active" style="height:40%"></div>
+            <div class="bar active" style="height:60%"></div>
+            <div class="bar active" style="height:80%"></div>
+            <div class="bar active" style="height:100%"></div>
+        </div>
+        
+        <!-- WiFi 图标 -->
+        <div class="sb-wifi">
+            <svg viewBox="0 0 24 24">
+                <path d="M12,4.5c4.5,0,8.6,1.8,11.5,4.7l-2.1,2.5c-2.4-2.4-5.7-3.9-9.4-3.9s-7,1.5-9.4,3.9L0.5,9.2 C3.4,6.3,7.5,4.5,12,4.5z M12,10.5c2.7,0,5.2,1.1,6.9,2.8l-2.1,2.5c-1.2-1.2-2.9-1.9-4.8-1.9s-3.6,0.7-4.8,1.9L5.1,13.3 C6.8,11.6,9.3,10.5,12,10.5z M12,16.5c0.9,0,1.8,0.4,2.4,1l-2.4,2.9l-2.4-2.9C10.2,16.9,11.1,16.5,12,16.5z"/>
+            </svg>
+        </div>
+
+        <!-- 电池图标 -->
+        <div class="sb-battery">
+            <div class="sb-bat-level" id="sb-bat-level" style="width:100%"></div>
+            <div class="battery-heart">❤️</div> <!-- 👈 新增：电池里的心 -->
+        </div>
+    </div>
+</div>
 
     <!-- 分页容器 -->
     <div class="pages-container" id="pagesContainer">
@@ -1177,5 +1209,7 @@
 <script src="system.js"></script>
 <script src="apps.js"></script>
 <script src="services.js"></script>
+<script src="system.js"></script>
+<script src="apps.js"></script>
 </body>
 </html>

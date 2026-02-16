@@ -6,17 +6,29 @@
 *, *::before, *::after {
     box-sizing: border-box;
 }
+
 html, body {
-     /* 强制锁定，禁止任何方向的滚动和回弹 */
+    /* 1. 强制锁定位置 */
     position: fixed; 
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    
+    /* 2. 核心修改：适配安卓高度的关键 */
+    height: 100%;      /* 备用方案 */
+    height: 100vh;     /* 备用方案 */
+    height: 100dvh;    /* 👈 动态视口高度：自动扣除安卓导航栏 */
+    
+    margin: 0;
+    padding: 0;
     overflow: hidden;
-    /* 禁止 iOS 的橡皮筋回弹效果 */
+
+    /* 3. 禁止 iOS 和安卓的默认回弹与缩放 */
     -webkit-overflow-scrolling: none; 
+    overscroll-behavior: none;
+    touch-action: none; /* 👈 解决安卓无法滑动选择的重要属性 */
 }
+
 /* ============================================================
    【1. 字体引入】
    ============================================================ */
@@ -337,28 +349,160 @@ body {
 }
 
 /* 2. 修正大主管 #iphone 的位置和高度 */
+/* base.css */
+
 #iphone {
-    position: fixed;      /* 👈 改为 fixed，确保相对于浏览器窗口定位 */
+    /* 1. 强制固定定位：防止安卓端因地址栏抖动 */
+    position: fixed;      
     top: 0;
     left: 0;
-    width: 100vw;
-    /* 特别适配 iOS：优先使用 100dvh，如果浏览器不支持则用 100vh */
-    height: 100vh; 
+    width: 100%;
+    
+    /* 2. 动态高度适配：解决安卓底部遮挡的核心 */
+    height: 100%; 
     height: 100dvh; 
     
-    overflow: hidden !important; /* 👈 核心：剪掉所有超出屏幕外的页面 */
+    /* 3. 剪裁与层级 */
+    overflow: hidden !important; 
     margin: 0;
     padding: 0;
     z-index: 1;
     
+    /* 4. 垂直布局：确保状态栏、主屏、Dock 顺序排列 */
+    display: flex;
+    flex-direction: column; 
+ /* 👈 记得这个结束括号一定要有 */
+
     /* 确保背景壁纸逻辑依然生效 */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
-
 /* 3. 保持你原本的壁纸逻辑不变 */
 #iphone.mode-ios {
     background-image: url('https://raw.githubusercontent.com/1687216166Pat/photo/main/IMG_3615px;.jpeg') !important;
     transition: background 0.5s ease;
+}
+/* 启动页容器 */
+#startup-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #FAFAFA; /* 极浅奶油白 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100000; /* 确保在最顶层 */
+    transition: opacity 0.8s ease-out; /* 消失时的平滑淡出 */
+}
+
+.startup-content {
+    text-align: center;
+    width: 220px;
+}
+
+/* 花体字样式 */
+.re-phone-logo {
+    font-family: 'Dancing Script', cursive;
+    font-size: 48px;
+    color: #444;
+    margin-bottom: 50px; /* 下两行的距离 */
+    opacity: 0;
+    transform: translateY(10px);
+    animation: logoFadeIn 1s forwards 0.3s; /* 文字优雅浮现 */
+}
+
+@keyframes logoFadeIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 进度条区域 */
+.progress-wrapper {
+    position: relative;
+    width: 100%;
+    height: 2px;
+    display: flex;
+    align-items: center;
+}
+
+.progress-line {
+    width: 100%;
+    height: 1px;
+    background-color: #E0E0E0; /* 极细的灰色直线 */
+}
+
+/* 弹性空心小球 */
+.progress-ball {
+    position: absolute;
+    left: 0%; /* 起点 */
+    width: 14px;
+    height: 14px;
+    background-color: #FAFAFA; /* 内部填充奶油白 */
+    border: 2px solid #FFB6C1; /* 粉色空心边框 */
+    border-radius: 50%;
+    transform: translateX(-50%);
+    
+    /* 核心：三次贝塞尔曲线实现弹性回弹 (Over-shoot) */
+    transition: left 2.2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    z-index: 10;
+}
+
+/* 消失状态 */
+.startup-hidden {
+    opacity: 0 !important;
+    pointer-events: none;
+}
+/* --- 安卓模式专属状态栏样式 --- */
+
+/* 1. 默认隐藏那些小红心（iOS模式不显示） */
+.android-only-heart, .battery-heart {
+    display: none;
+}
+
+/* 2. 当处于安卓模式时，开启粉红主题 */
+.mode-android .status-bar {
+    color: #FFB6C1; /* 文字变粉色 */
+}
+
+/* 显示心心 */
+.mode-android .android-only-heart {
+    display: inline-block;
+    margin-left: 3px;
+    font-size: 12px;
+}
+
+.mode-android .battery-heart {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* 居中 */
+    font-size: 8px;
+    z-index: 10; /* 确保在电量填充层上面 */
+}
+
+/* 3. 信号条变粉色 */
+.mode-android .sb-signal .bar.active {
+    background-color: #FFB6C1 !important;
+}
+
+/* 4. WiFi 变粉色 */
+.mode-android .sb-wifi svg {
+    fill: #FFB6C1 !important;
+}
+
+/* 5. 电池外壳和电量填充变粉色 */
+.mode-android .sb-battery {
+    border-color: #FFB6C1 !important;
+}
+
+.mode-android .sb-bat-level {
+    background-color: #FFB6C1 !important;
+}
+
+/* 6. 电池正极小头也要变粉色 */
+.mode-android .sb-battery::after {
+    background-color: #FFB6C1 !important;
 }

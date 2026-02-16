@@ -527,22 +527,38 @@ body.dark-mode .status-bar {
 /* ============================================================
    【10. Dock栏】
    ============================================================ */
+/* components.css */
+
 .dock { 
     position: absolute; 
-    bottom: calc(10px + var(--safe-bottom)); 
+    /* 核心修改：增加基础高度到 25px，并使用标准 env 变量 */
+    bottom: calc(25px + env(safe-area-inset-bottom)); 
+    
     left: 15px; 
     right: 15px; 
     height: 90px; 
-    background: var(--bg-dock); 
+    background: var(--bg-dock, rgba(255, 255, 255, 0.2)); /* 增加备用颜色防止变量失效 */
     backdrop-filter: blur(30px); 
+    -webkit-backdrop-filter: blur(30px); /* 兼容 iOS Safari */
+    
     border: 1px solid rgba(255,255,255,0.2); 
     border-radius: 35px; 
     display: flex; 
     justify-content: space-evenly; 
     align-items: center; 
-    z-index: 20; 
-    transition: background 0.3s; 
+    
+    /* 确保层级在最前，且不被拉伸 */
+    z-index: 100; 
+    flex-shrink: 0;
+    
+    transition: background 0.3s, transform 0.3s; 
 }
+
+/* 增加一个点击反馈，让朋友知道自己点到了 */
+.dock:active {
+    transform: scale(0.98);
+}
+
 /* ============================================================
    【浅色模式专属优化】(只在非深色模式下生效)
    ============================================================ */
