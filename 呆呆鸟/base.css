@@ -7,15 +7,16 @@
     box-sizing: border-box;
 }
 html, body {
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden; /* 整个浏览器不准滚动 */
-    background-color: #000;
+     /* 强制锁定，禁止任何方向的滚动和回弹 */
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    /* 禁止 iOS 的橡皮筋回弹效果 */
+    -webkit-overflow-scrolling: none; 
 }
-
-
 /* ============================================================
    【1. 字体引入】
    ============================================================ */
@@ -335,26 +336,29 @@ body {
     } 
 }
 
-/* 修改后的 #iphone 代码 */
+/* 2. 修正大主管 #iphone 的位置和高度 */
 #iphone {
-    /* --- 1. 结构锁定 (解决右移和露馅的关键) --- */
-    position: fixed;      /* 👈 强制固定在屏幕上，不随滚动条移动 */
+    position: fixed;      /* 👈 改为 fixed，确保相对于浏览器窗口定位 */
     top: 0;
     left: 0;
-    width: 100vw;         /* 👈 宽度占满视口 */
-    height: 100vh;        /* 👈 高度占满视口 */
-    overflow: hidden;     /* 👈 关键！剪掉所有超出屏幕外的 App 或控制中心 */
+    width: 100vw;
+    /* 特别适配 iOS：优先使用 100dvh，如果浏览器不支持则用 100vh */
+    height: 100vh; 
+    height: 100dvh; 
+    
+    overflow: hidden !important; /* 👈 核心：剪掉所有超出屏幕外的页面 */
     margin: 0;
     padding: 0;
-    z-index: 1;           /* 基础层级 */
-}
-
-/* 保持你原本的壁纸逻辑不变 */
-#iphone.mode-ios {
-    background-image: url('https://raw.githubusercontent.com/1687216166Pat/photo/main/IMG_3615px;.jpeg') !important;
+    z-index: 1;
+    
+    /* 确保背景壁纸逻辑依然生效 */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-color: #e8e2d6;
+}
+
+/* 3. 保持你原本的壁纸逻辑不变 */
+#iphone.mode-ios {
+    background-image: url('https://raw.githubusercontent.com/1687216166Pat/photo/main/IMG_3615px;.jpeg') !important;
     transition: background 0.5s ease;
 }
