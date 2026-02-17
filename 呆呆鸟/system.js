@@ -336,68 +336,67 @@ function setScheduleType(type) {
  * ============================================================
  */
 /* ============================================================
-   【2. system.js - 主屏幕模式切换逻辑 (记忆增强版)】
+   【2. system.js - 模式切换与开机还原】
    ============================================================ */
+
 function changeHomeMode(mode) {
     const iphone = document.getElementById('iphone');
-    
-    // 获取 Page 2 的布局
-    const androidLayout2 = document.getElementById('layout-android-style');
-    const iosLayout2 = document.getElementById('layout-ios-style');
-    
-    // 获取 Page 1 的布局
     const androidLayout1 = document.getElementById('page1-android-style');
     const iosLayout1 = document.getElementById('page1-ios-style');
-    
+    const androidLayout2 = document.getElementById('layout-android-style');
+    const iosLayout2 = document.getElementById('layout-ios-style');
     const checkAndroid = document.getElementById('check-android');
     const checkIos = document.getElementById('check-ios');
 
+    // 纠错：如果传入的是 null，默认设为 ios
+    if (!mode) mode = 'ios';
+
     if (mode === 'ios') {
-        // --- 执行视觉切换 ---
         if(iphone) { iphone.classList.add('mode-ios'); iphone.classList.remove('mode-android'); }
-
-        if(androidLayout2) androidLayout2.style.display = 'none';
-        if(iosLayout2) iosLayout2.style.display = 'block';
-
         if(androidLayout1) androidLayout1.style.display = 'none';
         if(iosLayout1) iosLayout1.style.display = 'block';
-
+        if(androidLayout2) androidLayout2.style.display = 'none';
+        if(iosLayout2) iosLayout2.style.display = 'block';
         if(checkIos) { checkIos.style.background = '#007aff'; checkIos.style.borderColor = '#007aff'; }
         if(checkAndroid) { checkAndroid.style.background = 'none'; checkAndroid.style.borderColor = '#ccc'; }
         
-        // --- 执行记忆同步 ---
-        window.phoneState.mode = 'ios'; // 存入大脑记录
-        window.saveAllToLocal();        // 写入手机内存
-
+        // 记录数据
+        window.phoneState.mode = 'ios';
     } else {
-        // --- 执行视觉切换 ---
         if(iphone) { iphone.classList.add('mode-android'); iphone.classList.remove('mode-ios'); }
-
-        if(androidLayout2) androidLayout2.style.display = 'block';
-        if(iosLayout2) iosLayout2.style.display = 'none';
-
         if(androidLayout1) androidLayout1.style.display = 'block';
         if(iosLayout1) iosLayout1.style.display = 'none';
-
+        if(androidLayout2) androidLayout2.style.display = 'block';
+        if(iosLayout2) iosLayout2.style.display = 'none';
         if(checkAndroid) { checkAndroid.style.background = '#007aff'; checkAndroid.style.borderColor = '#007aff'; }
         if(checkIos) { checkIos.style.background = 'none'; checkIos.style.borderColor = '#ccc'; }
 
-        // --- 执行记忆同步 ---
-        window.phoneState.mode = 'android'; // 存入大脑记录
-        window.saveAllToLocal();           // 写入手机内存
+        // 记录数据
+        window.phoneState.mode = 'android';
     }
+    
+    // 执行强制保存
+    window.saveAllToLocal();
 }
 
-// 自动初始化逻辑：当网页一打开，就执行下面的代码
-window.addEventListener('DOMContentLoaded', () => {
-    // 1. 从我们的“记忆大脑”里直接拿上次存好的模式
-    const savedMode = window.phoneState.mode; 
+// --- 开机还原逻辑 (关键：针对 iOS 优化) ---
+window.addEventListener('load', () => {
+    console.log("📱 系统正在启动...");
     
-    // 2. 执行切换函数，还原上次的界面
-    changeHomeMode(savedMode);
-    
-    console.log("📱 欢迎回来，已为你还原上次的模式:", savedMode);
+    // 1. 优先使用大脑里的数据
+    let targetMode = window.phoneState.mode;
+
+    // 2. 二次检查：如果大脑没记准，看一眼备用钥匙
+    const backupMode = localStorage.getItem('homeMode');
+    if (!targetMode && backupMode) {
+        targetMode = backupMode;
+    }
+
+    // 3. 执行还原
+    console.log("正在还原模式:", targetMode);
+    changeHomeMode(targetMode);
 });
+
 
 /* ============================================================
    iOS 全局手势引擎 (下拉唤起、上滑返回)

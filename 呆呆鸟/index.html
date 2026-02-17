@@ -1205,11 +1205,16 @@
 </div>
 
 
-<!-- ✅ 修复点2：我已经帮你把JS钥匙也换对了 -->
-<script src="system.js"></script>
-<script src="apps.js"></script>
+<!-- ✅ 修正后的脚本加载顺序：确保大脑最先加载 -->
+
+<!-- 1. 最先加载：记忆大脑（定义数据和保存函数） -->
 <script src="services.js"></script>
+
+<!-- 2. 其次加载：系统逻辑（使用大脑的数据来还原模式） -->
 <script src="system.js"></script>
+
+<!-- 3. 最后加载：App逻辑（处理具体的页面交互） -->
 <script src="apps.js"></script>
+
 </body>
 </html>

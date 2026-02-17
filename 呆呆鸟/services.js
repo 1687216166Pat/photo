@@ -3,37 +3,55 @@
 // ============================================================
 
 /* ============================================================
-   【Re phone 中央数据库管理 - 最终统一版】
+   【1. services.js - 增强型记忆大脑】
    ============================================================ */
 
-// 1. 定义存储的“箱子”名字
-const PHONE_DATA_KEY = 're_phone_data_v1';
+// 定义存储钥匙（增加版本号，防止旧数据冲突）
+const RE_PHONE_KEY = 're_phone_storage_v2';
 
-// 2. 初始化：开机时直接去抽屉拿数据
-const savedData = localStorage.getItem(PHONE_DATA_KEY);
-
-window.phoneState = savedData ? JSON.parse(savedData) : {
-    mode: 'android',       // 默认模式 (android 或 ios)
-    widgets: [],           // 已添加的小组件
-    chats: [],             // 聊天记录
-    lastFortuneDate: ''    // 上次抽签日期
-};
-
-// 3. 统一保存函数 (对应你第二步代码里的调用)
-window.saveAllToLocal = function() {
-    localStorage.setItem(PHONE_DATA_KEY, JSON.stringify(window.phoneState));
-    console.log("✅ 系统数据已实时同步到本地存储");
-};
-
-// 4. (可选) 加载函数：如果其他地方需要手动加载
-window.loadPhoneState = function() {
-    const saved = localStorage.getItem(PHONE_DATA_KEY);
-    if (saved) {
-        window.phoneState = JSON.parse(saved);
-        return true;
+// 1. 核心加载函数：确保读取过程不崩溃
+function getInitialData() {
+    try {
+        const saved = localStorage.getItem(RE_PHONE_KEY);
+        if (saved && saved !== "undefined" && saved !== "null") {
+            const parsed = JSON.parse(saved);
+            // 确保读取到的数据包含必要字段
+            if (parsed && typeof parsed === 'object') {
+                return parsed;
+            }
+        }
+    } catch (e) {
+        console.error("读取本地存储失败:", e);
     }
-    return false;
+    // 如果没有数据或读取失败，返回默认初始化设置
+    return {
+        mode: 'ios',        // 默认模式
+        widgets: [],        // 已添加的小组件
+        chats: [],          // 聊天记录
+        lastFortuneDate: '' // 上次抽签日期
+    };
+}
+
+// 2. 初始化全局变量 window.phoneState
+window.phoneState = getInitialData();
+
+// 3. 增强型保存函数：强制写入磁盘
+window.saveAllToLocal = function() {
+    try {
+        if (!window.phoneState) return;
+        
+        const dataString = JSON.stringify(window.phoneState);
+        localStorage.setItem(RE_PHONE_KEY, dataString);
+        
+        // 针对 iOS 的双重保险：同时也存一份旧的 Key，防止切换逻辑出错
+        localStorage.setItem('homeMode', window.phoneState.mode);
+        
+        console.log("✅ 数据已同步至 iOS 磁盘:", window.phoneState.mode);
+    } catch (e) {
+        console.error("写入磁盘失败:", e);
+    }
 };
+
 
 
 // 1. API 功能

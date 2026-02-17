@@ -997,3 +997,17 @@ body.dark-mode .text-area div {
 .cc-circle-icon { width: 52px; height: 52px; background: rgba(255, 255, 255, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; }
 .cc-mini-quad { width: 52px; height: 52px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
 .cc-mini-dot { background: rgba(255, 255, 255, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; }
+
+/* iOS 模式第二页的小组件 */
+.ios-widget-container {
+    width: 100%;            /* 占满父容器（也就是那一页）的宽度 */
+    max-width: 330px;       /* 限制最大宽度，防止太难看 */
+    height: 160px;
+    background: rgba(120, 120, 120, 0.25); /* 灰色毛玻璃 */
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-radius: 28px;
+    border: 0.5px solid rgba(255, 255, 255, 0.15);
+    margin-top: 20px;       /* 只给顶部一点间距 */
+    flex-shrink: 0;         /* 禁止小组件自己被压扁 */
+}

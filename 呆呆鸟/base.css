@@ -506,3 +506,50 @@ body {
 .mode-android .sb-battery::after {
     background-color: #FFB6C1 !important;
 }
+/* --- 1. 手机屏幕主体 --- */
+.iphone-screen {
+    position: relative;
+    width: 100%;
+    height: 100%; 
+    display: flex;
+    flex-direction: column; /* 纵向排列：状态栏 -> 分页 -> Dock */
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+}
+
+/* --- 2. 分页容器（中间层） --- */
+.pages-container {
+    display: flex;          /* 横向排列 Page 1, 2, 3 */
+    flex: 1;                /* 【关键】自动填充状态栏和Dock之间的所有剩余空间 */
+    width: 300%;            /* 三页的总宽 */
+    transition: transform 0.3s ease-out;
+    /* 删掉之前的 height: 100%，让 flex: 1 起作用 */
+}
+
+/* --- 3. 每一页的独立空间 --- */
+.pages-container > div {
+    width: 33.3333%;        /* 每一页占屏幕宽度的 100% */
+    height: 100%;           /* 这里的 100% 是相对于父级 flex: 1 的高度 */
+    flex-shrink: 0;         /* 绝对禁止被挤压 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;          /* 给内部留点空隙 */
+    box-sizing: border-box;
+    overflow: hidden;       /* 内部乱了也不影响外部 */
+}
+
+/* --- 4. Dock 栏（底部层） --- */
+.dock {
+    /* 确保你的 dock 类名是这个，如果不是请修改 */
+    height: 90px;           /* 固定 Dock 的高度 */
+    width: 90%;
+    margin: 0 auto 15px auto; /* 居中并距离底部一点距离 */
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 30px;
+    flex-shrink: 0;         /* 【关键】防止 Dock 被上面的分页容器压扁 */
+    z-index: 10;            /* 确保在最上层 */
+}
