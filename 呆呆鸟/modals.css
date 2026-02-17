@@ -693,11 +693,11 @@ html, body {
 /* 3. 整合你原本的壁纸逻辑 */
 #iphone.mode-ios {
     /* 修正了链接中的空格，确保图片能显示 */
-    background-image: url('https://raw.githubusercontent.com/1687216166Pat/photo/main/IMG_3615px;.jpeg') !important;
+    background-image: url('https://raw.githubusercontent.com/1687216166Pat/photo/main/IMG_4017.jpeg') !important;
     background-size: cover !important;           /* 图片铺满 */
     background-position: center !important;      /* 图片居中 */
     background-repeat: no-repeat !important;
-    background-color: #e8e2d6 !important;
+    background-color: #f0ebeb !important;
     transition: background 0.5s ease;
 }
 

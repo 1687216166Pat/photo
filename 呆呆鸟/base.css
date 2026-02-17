@@ -300,21 +300,32 @@ body {
     /* --- 核心布局和尺寸 --- */
     position: relative;
     width: 100%;
-    height: 100%; /* 或者 100vh */
-    margin: 0 auto; /* 在大屏幕上让模拟器水平居中 */
+    /* 修改：强制使用视口高度，解决全屏模式下的高度计算问题 */
+    height: 100vh; 
+    margin: 0 auto; 
     display: flex;
     flex-direction: column;
     
-    /* --- 溢出控制 (在所有情况下都必须生效！) --- */
+    /* --- 溢出控制 --- */
     overflow: hidden; 
 
     /* --- 背景和外观 --- */
-    background: url('https://raw.githubusercontent.com/1687216166Pat/photo/main/IMG_3572.jpeg') center/cover no-repeat;
+    /* 确保背景图覆盖整个屏幕，包括安全区域 */
+    background: url('https://raw.githubusercontent.com/1687216166Pat/photo/main/IMG_4016.jpeg') center/cover no-repeat;
     color: var(--text-primary);
     
+    /* --- 安全区域适配 --- */
+    /* 解决底部黑边：自动留出底部横条高度 */
+    padding-bottom: env(safe-area-inset-bottom);
+    /* 解决顶部重合预留：如果你想简单粗暴解决重合，可以取消下面这行的注释 */
+    /* padding-top: env(safe-area-inset-top); */
+    
+    box-sizing: border-box; /* 必须加这一行，防止 padding 撑开容器 */
+    
     /* --- 动画效果 --- */
-    transition: all 0.3s ease; /* transition: all 会让尺寸变化也产生动画，效果更平滑 */
+    transition: all 0.3s ease;
 }
+
 
 /* 壁纸压暗遮罩 (保持不变，很完美) */
 .iphone-screen::after {
@@ -380,7 +391,7 @@ body {
 }
 /* 3. 保持你原本的壁纸逻辑不变 */
 #iphone.mode-ios {
-    background-image: url('https://raw.githubusercontent.com/1687216166Pat/photo/main/IMG_3615px;.jpeg') !important;
+    background-image: url('https://raw.githubusercontent.com/1687216166Pat/photo/main/IMG_4017.jpeg') !important;
     transition: background 0.5s ease;
 }
 /* 启动页容器 */
@@ -535,7 +546,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;          /* 给内部留点空隙 */
+    padding: 50px;          /* 给内部留点空隙 */
     box-sizing: border-box;
     overflow: hidden;       /* 内部乱了也不影响外部 */
 }
